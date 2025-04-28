@@ -7,54 +7,92 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #fff0f5;
+      background: linear-gradient(to right, #ffe4e1, #fff0f5);
       text-align: center;
       padding: 2rem;
       color: #333;
     }
     h1 {
+      font-family: 'Dancing Script', cursive;
       color: #c71585;
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    video {
+      width: 90%;
+      max-width: 400px;
+      margin-top: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     select, button, a {
-      padding: 10px;
-      margin: 10px;
-      border: none;
+      margin: 15px;
+      padding: 12px;
       border-radius: 8px;
       background-color: #c71585;
+      border: none;
       color: white;
-      font-size: 1em;
+      font-size: 1rem;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
     }
     .info {
-      margin-top: 10px;
+      margin-top: 15px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>MakeUpMirror by Stanislava</h1>
-  <p>Пробвай грима си виртуално!</p>
 
-  <select id="product-select">
-    <option value="">Избери продукт</option>
-    <option value="Cherry">Червило The ONE - Cherry (код: 44829)</option>
-    <option value="NudeRose">Червило The ONE - Nude Rose (код: 44822)</option>
-    <option value="LightBeige">Фон дьо тен The ONE - Light Beige (код: 42239)</option>
-    <option value="GoldShadow">Сенки за очи The ONE - Gold (код: 46569)</option>
-  </select>
+  <h1>С любов, Stanislava</h1>
+  <p>Огледай се в нова светлина...</p>
+
+  <video id="video" autoplay muted playsinline></video>
+
+  <div>
+    <select id="product-select">
+      <option value="">Избери продукт</option>
+      <option value="rgba(255,99,132,0.4)">Червило Cherry (код: 44829)</option>
+      <option value="rgba(255,182,193,0.4)">Червило Nude Rose (код: 44822)</option>
+      <option value="rgba(240,230,140,0.3)">Фон дьо тен Light Beige (код: 42239)</option>
+      <option value="rgba(173,216,230,0.3)">Сенки Gold Shadow (код: 46569)</option>
+    </select>
+  </div>
 
   <div class="info" id="info-box"></div>
 
-  <br><br>
   <a href="https://www.facebook.com/profile.php?id=100072670572520" target="_blank">Поръчай / Научи повече</a>
 
   <script>
+    const video = document.getElementById('video');
     const select = document.getElementById('product-select');
-    const info = document.getElementById('info-box');
+    const infoBox = document.getElementById('info-box');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error('Грешка при достъп до камерата', err);
+      });
 
     select.addEventListener('change', () => {
-      info.textContent = select.options[select.selectedIndex].textContent;
+      const color = select.value;
+      const name = select.options[select.selectedIndex].textContent;
+      infoBox.textContent = name;
+      if (color) {
+        video.style.background = color;
+        video.style.mixBlendMode = "screen";
+      } else {
+        video.style.background = "none";
+        video.style.mixBlendMode = "normal";
+      }
     });
   </script>
+
 </body>
 </html>
